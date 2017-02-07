@@ -80,7 +80,7 @@ view: trip {
     sql: ${TABLE}.usertype ;;
   }
 
-  measure: count {
+  measure: trip_count {
     type: count
     drill_fields: [trip_id, from_station_name, to_station_name, trip.count]
   }
@@ -100,5 +100,11 @@ view: trip {
   measure:  count_distinct_dates {
     type: count_distinct
     sql:  ${start_date} ;;
+  }
+
+  measure:  average_trips_per_day {
+    type:  number
+    sql:  1.0 * ${trip_count}/${count_distinct_dates} ;;
+    value_format_name: decimal_0
   }
 }

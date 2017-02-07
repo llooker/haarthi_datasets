@@ -74,4 +74,9 @@ view: weather {
     type: count
     drill_fields: []
   }
+
+  dimension: predictions {
+    type:  number
+    sql:  (${mean_temperature_f} * 47.346939) + 3402.245766 ;;
+  }
 }
