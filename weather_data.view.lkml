@@ -22,8 +22,6 @@ view: weather_data {
     sql: timestamp(${TABLE}.forecast_date);;
     }
 
-
-
   dimension: temperature {
     type: number
     sql: ${TABLE}.Temperature ;;

@@ -75,6 +75,11 @@ view: trip {
     sql: cast(${TABLE}.trip_duration as FLOAT64);;
   }
 
+  dimension: trip_duration_minutes {
+    type: number
+    sql: ${trip_duration}/60.0;;
+  }
+
   dimension: usertype {
     type: string
     sql: ${TABLE}.usertype ;;
@@ -96,6 +101,29 @@ view: trip {
     sql: ${trip_duration} / 60.0;;
     value_format_name: decimal_2
   }
+
+  dimension:  bike_rental_added_cost {
+    type: number
+    sql:
+     CASE WHEN ${trip_duration_minutes} < 30 then 0
+          WHEN ${trip_duration_minutes} >=30 then ((${trip_duration_minutes}-30)/15) * 2.5
+          ELSE NULL
+     END;;
+    value_format_name: usd_0
+  }
+
+  measure:  average_bike_rental_added_cost {
+    type:  average
+    sql: ${bike_rental_added_cost} ;;
+    value_format_name: usd_0
+  }
+
+  measure:  total_bike_rental_added_cost {
+    type:  sum
+    sql: ${bike_rental_added_cost} ;;
+    value_format_name: usd_0
+  }
+
 
   measure:  count_distinct_dates {
     type: count_distinct

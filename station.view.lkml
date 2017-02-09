@@ -28,13 +28,21 @@ view: station {
   }
 
   dimension: latitude {
+    hidden: yes
     type: string
     sql: ${TABLE}.latitude ;;
   }
 
   dimension: longitude {
+    hidden: yes
     type: string
     sql: ${TABLE}.longitude ;;
+  }
+
+  dimension: station_location {
+    type: location
+    sql_latitude: ${latitude} ;;
+    sql_longitude: ${longitude} ;;
   }
 
   dimension: modification_date {
