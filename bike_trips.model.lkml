@@ -1,5 +1,6 @@
 connection: "haarthi-bigquery"
 
+
 # include all the views
 include: "*.view"
 
