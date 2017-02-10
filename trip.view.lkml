@@ -102,6 +102,12 @@ view: trip {
     value_format_name: decimal_2
   }
 
+  measure: total_trip_duration_minutes {
+    type: sum
+    sql: ${trip_duration_minutes};;
+    value_format_name: decimal_2
+  }
+
   dimension:  bike_rental_added_cost {
     type: number
     sql:
@@ -135,4 +141,36 @@ view: trip {
     sql:  1.0 * ${trip_count}/${count_distinct_dates} ;;
     value_format_name: decimal_0
   }
+
+## Predictions
+
+  dimension: trip_duration_prediction {
+    type: number
+    sql: ((${trip_time_prediction.x0} * ${weather.temperature} ) + (${trip_time_prediction.x1} * ${weather.humidity})+ ${trip_time_prediction.intercept});;
+    value_format_name: decimal_2
+  }
+
+  measure:  average_trip_duration_prediction {
+    type: average
+    sql: ((${trip_time_prediction.x0} * ${weather.temperature} ) + (${trip_time_prediction.x1} * ${weather.humidity})+ ${trip_time_prediction.intercept});;
+    value_format_name: decimal_2
+  }
+
+#   dimension:  bike_rental_added_cost {
+#     type: number
+#     sql:
+#      CASE WHEN ${trip_duration_minutes} < 30 then 0
+#           WHEN ${trip_duration_minutes} >=30 then ((${trip_duration_minutes}-30)/15) * 2.5
+#           ELSE NULL
+#      END;;
+#     value_format_name: usd_0
+#   }
+#
+#   measure:  average_bike_rental_added_cost_prediction {
+#     type:  average
+#     sql: ${bike_rental_added_cost} ;;
+#     value_format_name: usd_0
+#   }
+
+
 }

@@ -35,23 +35,31 @@ explore: trip {
     fields: [current_predictions*]
   }
 
-#   join:  weather_forecast {
-#     relationship: many_to_one
-#     type: full_outer
-#     sql_on: ${trip.start_date} = ${weather_forecast.forecast_date} ;;
-#   }
-}
-
-
-explore:  weather_forecast {
-  join: station_prediction {
-    relationship: one_to_many
+  join: trip_time_prediction {
     type: cross
-    fields: [forecast_predictions*]
-  }
-  join:  station {
-    relationship: one_to_one
-    type: left_outer
-    sql_on: ${station_prediction.bike_station} = ${station.station_id} ;;
+    relationship: many_to_one
   }
 }
+
+
+# explore:  weather {
+#   from: weather_forecast
+#   view_label: "Future Weather Forecasts"
+#
+#   join: station_prediction {
+#     relationship: one_to_many
+#     type: cross
+#     fields: [forecast_predictions*]
+#   }
+#
+#   join: trip_time_prediction {
+#     type: cross
+#     relationship: many_to_one
+#   }
+#
+#   join:  station {
+#     relationship: one_to_one
+#     type: left_outer
+#     sql_on: ${station_prediction.bike_station} = ${station.station_id} ;;
+#   }
+# }

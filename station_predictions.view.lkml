@@ -29,13 +29,13 @@ view: station_prediction {
 
   measure:  start_predictions {
     type:  average
-    sql: (${start_slope} * ${weather.mean_temperature_f} ) +  ${start_intercept};;
+    sql: (${start_slope} * ${weather.temperature} ) +  ${start_intercept};;
     value_format_name: decimal_1
   }
 
   measure:  end_predictions {
     type:  average
-    sql: (${end_slope} * ${weather.mean_temperature_f} ) +  ${end_intercept};;
+    sql: (${end_slope} * ${weather.temperature} ) +  ${end_intercept};;
     value_format_name: decimal_1
   }
 
@@ -50,19 +50,19 @@ view: station_prediction {
 
   measure:  start_predictions_forecast {
     type:  average
-    sql: (${start_slope} * ${weather_forecast.temperature} ) +  ${start_intercept};;
+#     sql: (${start_slope} * ${weather.temperature} ) +  ${start_intercept};;
     value_format_name: decimal_1
   }
 
   measure:  end_predictions_forecast {
     type:  average
-    sql: (${end_slope} * ${weather_forecast.temperature} ) +  ${end_intercept};;
+#     sql: (${end_slope} * ${weather_forecast.temperature} ) +  ${end_intercept};;
     value_format_name: decimal_1
   }
 
   measure:  station_overflow_forecast {
     type: number
-    sql:  ${end_predictions_forecast} - ${start_predictions_forecast} ;;
+#     sql:  ${end_predictions_forecast} - ${start_predictions_forecast} ;;
     value_format_name: decimal_1
   }
 

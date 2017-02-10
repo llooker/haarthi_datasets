@@ -1,3 +1,5 @@
+explore:  weather {}
+
 view: weather {
   sql_table_name: bike_trips.weather ;;
   dimension_group: weather {
@@ -10,8 +12,8 @@ view: weather {
       quarter,
       year
     ]
-    convert_tz: no
     sql: timestamp(${TABLE}.weather_date);;
+    convert_tz: no
   }
 
   dimension: weather {
@@ -25,13 +27,13 @@ view: weather {
     sql: ${TABLE}.Events ;;
   }
 
-  dimension: mean_humidity {
+  dimension: humidity {
     label: "Humidity"
     type: string
     sql: cast(${TABLE}.Mean_Humidity as int64);;
   }
 
-  dimension: mean_temperature_f {
+  dimension: temperature {
     label: "Temperature (F)"
     type: number
     sql: cast(${TABLE}.Mean_TemperatureF as int64);;
@@ -47,10 +49,10 @@ view: weather {
     sql: cast(${TABLE}.Precipitation_In as int64);;
   }
 
-  dimension: predictions {
-    type:  number
-    sql:  (${mean_temperature_f} * 47.346939) + 3402.245766 ;;
-  }
+#   dimension: predictions {
+#     type:  number
+#     sql:  (${temperature} * 47.346939) + 3402.245766 ;;
+#   }
 
 
 
@@ -85,5 +87,10 @@ view: weather {
     type: string
     sql: ${TABLE}.Min_TemperatureF ;;
   }
+
+#   dimension: naem {
+#     sql: ${trip_time_predictions.} ;;
+#   }
+
 
 }
