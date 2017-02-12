@@ -155,10 +155,13 @@ view: trip {
     value_format_name: decimal_0
   }
 
-  measure: trip_prediction{
+  measure: trip_time_prediction{
     type: average
-    sql:  (${trip_time_prediction.x0} * ${weather.temperature}) + (${trip_time_prediction.x0} * ${weather.temperature}) + ${trip_time_prediction.intercept};;
+    sql:  (${trip_time_prediction.x0} * ${weather.temperature}) +
+          (${trip_time_prediction.x1} * ${weather.humidity}) +
+          ${trip_time_prediction.intercept};;
     value_format_name: decimal_1
+    view_label: "Trip Time Prediction"
   }
 
 #   measure: day_pass_earnings_forecast {

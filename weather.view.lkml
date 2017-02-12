@@ -27,10 +27,25 @@ view: weather {
        ;;
   }
 
-  dimension: weather_date {
+  dimension: date {
     primary_key: yes
+    hidden: yes
     type: string
     sql: ${TABLE}.weather_weather ;;
+  }
+
+  dimension_group: weather {
+    type: time
+    timeframes: [
+      raw,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    convert_tz: no
+    sql: timestamp(${date});;
   }
 
   dimension: events {

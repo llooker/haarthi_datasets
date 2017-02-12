@@ -27,6 +27,7 @@ view: station_prediction {
     sql: ${TABLE}.end_slope ;;
   }
 
+  # Trip Predictions
   measure:  start_predictions {
     type:  average
     sql: (${start_slope} * ${weather.temperature} ) +  ${start_intercept};;
@@ -39,30 +40,9 @@ view: station_prediction {
     value_format_name: decimal_1
   }
 
-  measure:  station_overflow {
+  measure:  predicted_station_overflow {
     type: number
     sql:  ${end_predictions} - ${start_predictions} ;;
-    value_format_name: decimal_1
-  }
-
-
-  # For Weather Predictions
-
-  measure:  start_predictions_forecast {
-    type:  average
-#     sql: (${start_slope} * ${weather.temperature} ) +  ${start_intercept};;
-    value_format_name: decimal_1
-  }
-
-  measure:  end_predictions_forecast {
-    type:  average
-#     sql: (${end_slope} * ${weather_forecast.temperature} ) +  ${end_intercept};;
-    value_format_name: decimal_1
-  }
-
-  measure:  station_overflow_forecast {
-    type: number
-#     sql:  ${end_predictions_forecast} - ${start_predictions_forecast} ;;
     value_format_name: decimal_1
   }
 
@@ -70,15 +50,8 @@ view: station_prediction {
     fields: [
       start_predictions,
       end_predictions,
-      station_overflow
+      predicted_station_overflow
     ]
-  }
 
-  set: forecast_predictions {
-    fields: [
-      start_predictions_forecast,
-      end_predictions_forecast,
-      station_overflow_forecast
-    ]
   }
 }

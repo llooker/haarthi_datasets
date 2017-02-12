@@ -28,18 +28,10 @@ explore: trip {
     sql_on: ${trip.start_date} = ${weather.weather_date} ;;
   }
 
-  join:  weather_forecast {
-    relationship: many_to_one
-    type: full_outer
-    sql_on: ${trip.start_date} = ${weather_forecast.forecast_date} ;;
-  }
-
-
   join: station_prediction  {
     type:  left_outer
     relationship: one_to_one
     sql_on:  ${trip.from_station_id} = ${station_prediction.bike_station} ;;
-    fields: [current_predictions*]
   }
 
   join: trip_time_prediction {
@@ -50,13 +42,9 @@ explore: trip {
 
 
 explore:  weather {
-  from: weather_forecast
-  view_label: "Future Weather Forecasts"
-
   join: station_prediction {
     relationship: one_to_many
     type: cross
-    fields: [forecast_predictions*]
   }
 
   join: trip_time_prediction {
