@@ -25,4 +25,10 @@ view: trip_time_prediction {
     value_format_name: decimal_3
   }
 
+#   measure: prediction{
+#     type: average
+#     sql:  (${trip_time_prediction.x0} * ${weather.temperature}) + (${trip_time_prediction.x0} * ${weather.temperature}) + ${trip_time_prediction.intercept};;
+#     value_format_name: decimal_1
+#   }
+
 }

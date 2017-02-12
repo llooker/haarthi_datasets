@@ -90,6 +90,20 @@ view: trip {
     drill_fields: [trip_id, from_station_name, to_station_name, trip.count]
   }
 
+  measure:  non_member_count {
+    type: count
+    filters: {
+      field: usertype
+      value: "-Member"
+    }
+  }
+
+  measure: percent_non_member {
+    type: number
+    sql: ${non_member_count}/${trip_count} ;;
+    value_format_name: percent_2
+  }
+
   measure:  average_trip_duration_seconds {
     type: average
     sql: ${trip_duration} ;;
@@ -130,7 +144,6 @@ view: trip {
     value_format_name: usd_0
   }
 
-
   measure:  count_distinct_dates {
     type: count_distinct
     sql:  ${start_date} ;;
@@ -138,39 +151,26 @@ view: trip {
 
   measure:  average_trips_per_day {
     type:  number
-    sql:  1.0 * ${trip_count}/${count_distinct_dates} ;;
+    sql:  1.0 * ${trip_count}/NULLIF(${count_distinct_dates}, 0) ;;
     value_format_name: decimal_0
   }
 
-## Predictions
-
-  dimension: trip_duration_prediction {
-    type: number
-    sql: ((${trip_time_prediction.x0} * ${weather.temperature} ) + (${trip_time_prediction.x1} * ${weather.humidity})+ ${trip_time_prediction.intercept});;
-    value_format_name: decimal_2
-  }
-
-  measure:  average_trip_duration_prediction {
+  measure: trip_prediction{
     type: average
-    sql: ((${trip_time_prediction.x0} * ${weather.temperature} ) + (${trip_time_prediction.x1} * ${weather.humidity})+ ${trip_time_prediction.intercept});;
-    value_format_name: decimal_2
+    sql:  (${trip_time_prediction.x0} * ${weather.temperature}) + (${trip_time_prediction.x0} * ${weather.temperature}) + ${trip_time_prediction.intercept};;
+    value_format_name: decimal_1
   }
 
-#   dimension:  bike_rental_added_cost {
+#   measure: day_pass_earnings_forecast {
 #     type: number
-#     sql:
-#      CASE WHEN ${trip_duration_minutes} < 30 then 0
-#           WHEN ${trip_duration_minutes} >=30 then ((${trip_duration_minutes}-30)/15) * 2.5
-#           ELSE NULL
-#      END;;
-#     value_format_name: usd_0
-#   }
-#
-#   measure:  average_bike_rental_added_cost_prediction {
-#     type:  average
-#     sql: ${bike_rental_added_cost} ;;
+#     sql: ${trip_prediction} * ${percent_non_member};;
 #     value_format_name: usd_0
 #   }
 
+#   measure:  start_predictions {
+#     type:  average
+#     sql: (${start_slope} * ${weather.temperature} ) +  ${start_intercept};;
+#     value_format_name: decimal_1
+#   }
 
 }

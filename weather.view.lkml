@@ -1,96 +1,60 @@
-explore:  weather {}
-
 view: weather {
-  sql_table_name: bike_trips.weather ;;
-  dimension_group: weather {
-    type: time
-    timeframes: [
-      raw,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: timestamp(${TABLE}.weather_date);;
-    convert_tz: no
+  derived_table: {
+    sql:
+      (
+      SELECT
+        weather.weather_date AS weather_weather,
+        weather.Events  AS weather_events,
+        cast(weather.Mean_TemperatureF as int64) AS weather_temperature,
+        cast(weather.Mean_Humidity as int64) AS weather_humidity,
+        cast(weather.Mean_Wind_Speed_MPH as int64) AS weather_wind_speed_mph
+      FROM bike_trips.weather  AS weather
+      )
+
+      UNION ALL
+
+      (SELECT
+        -- weather.forecast_date AS weather_forecast_date
+        DATE(timestamp(weather.forecast_date)) AS weather_weather_date,
+      -- DATE(timestamp(forecast_date))
+        weather.Status  AS weather_status,
+        weather.Temperature  AS weather_temperature,
+        weather.Humidity  AS weather_humidity,
+        weather.Wind  AS weather_wind
+
+      FROM bike_trips.weather_forecast  AS weather
+      )
+       ;;
   }
 
-  dimension: weather {
-    type:  string
-    sql: ${TABLE}.weather_date;;
+  dimension: weather_date {
     primary_key: yes
+    type: string
+    sql: ${TABLE}.weather_weather ;;
   }
 
   dimension: events {
     type: string
-    sql: ${TABLE}.Events ;;
-  }
-
-  dimension: humidity {
-    label: "Humidity"
-    type: string
-    sql: cast(${TABLE}.Mean_Humidity as int64);;
+    sql: ${TABLE}.weather_events ;;
   }
 
   dimension: temperature {
     label: "Temperature (F)"
     type: number
-    sql: cast(${TABLE}.Mean_TemperatureF as int64);;
+    sql: ${TABLE}.weather_temperature ;;
+  }
+
+  dimension: humidity {
+    type: number
+    sql: ${TABLE}.weather_humidity ;;
   }
 
   dimension: wind_speed_mph {
     type: number
-    sql: cast(${TABLE}.Mean_Wind_Speed_MPH as int64);;
+    sql: ${TABLE}.weather_wind_speed_mph ;;
   }
 
-  dimension: precipitation_in {
-    type: string
-    sql: cast(${TABLE}.Precipitation_In as int64);;
+  set: detail {
+    fields: [weather_date, events, temperature, humidity, wind_speed_mph]
   }
-
-#   dimension: predictions {
-#     type:  number
-#     sql:  (${temperature} * 47.346939) + 3402.245766 ;;
-#   }
-
-
-
-
-
-  dimension: max_humidity {
-    type: number
-    hidden: yes
-    sql: INTEGER(${TABLE}.Max_Humidity) ;;
-  }
-
-  dimension: max_temperature_f {
-    type: string
-    hidden: yes
-    sql: ${TABLE}.Max_Temperature_F ;;
-  }
-
-  dimension: max_wind_speed_mph {
-    hidden: yes
-    type: string
-    sql: ${TABLE}.Max_Wind_Speed_MPH ;;
-  }
-
-  dimension: min_humidity {
-    hidden: yes
-    type: string
-    sql: ${TABLE}.Min_Humidity ;;
-  }
-
-  dimension: min_temperature_f {
-    hidden: yes
-    type: string
-    sql: ${TABLE}.Min_TemperatureF ;;
-  }
-
-#   dimension: naem {
-#     sql: ${trip_time_predictions.} ;;
-#   }
-
-
 }
