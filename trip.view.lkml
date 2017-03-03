@@ -155,11 +155,18 @@ view: trip {
     value_format_name: decimal_0
   }
 
-  measure: trip_time_prediction{
+  measure: trip_count_prediction{
     type: average
     sql:  (${trip_time_prediction.x0} * ${weather.temperature}) +
           (${trip_time_prediction.x1} * ${weather.humidity}) +
           ${trip_time_prediction.intercept};;
+    value_format_name: decimal_1
+    view_label: "Trip Time Prediction"
+  }
+
+  measure: trip_count_prediction_revenue{
+    type: number
+    sql:  ${trip_count_prediction} * 2.25;;
     value_format_name: decimal_1
     view_label: "Trip Time Prediction"
   }
