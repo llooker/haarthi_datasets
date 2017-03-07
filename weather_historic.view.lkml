@@ -1,6 +1,7 @@
 view: weather_historic {
   sql_table_name: bike_trips.weather ;;
-  dimension_group: weather {
+
+  dimension_group: date {
     type: time
     timeframes: [
       raw,
@@ -10,8 +11,8 @@ view: weather_historic {
       quarter,
       year
     ]
-    sql: timestamp(${TABLE}.weather_date);;
     convert_tz: no
+    sql: ${TABLE}.Date ;;
   }
 
   dimension: weather {
@@ -25,58 +26,53 @@ view: weather_historic {
     sql: ${TABLE}.Events ;;
   }
 
-  dimension: humidity {
-    label: "Humidity"
-    type: string
-    sql: cast(${TABLE}.Mean_Humidity as int64);;
-  }
-
-  dimension: temperature {
-    label: "Temperature (F)"
-    type: number
-    sql: cast(${TABLE}.Mean_TemperatureF as int64);;
-  }
-
-  dimension: wind_speed_mph {
-    type: number
-    sql: cast(${TABLE}.Mean_Wind_Speed_MPH as int64);;
-  }
-
-  dimension: precipitation_in {
-    type: string
-    sql: cast(${TABLE}.Precipitation_In as int64);;
-  }
-
-
-
   dimension: max_humidity {
     type: number
-    hidden: yes
-    sql: INTEGER(${TABLE}.Max_Humidity) ;;
+    sql: ${TABLE}.Max_Humidity ;;
   }
 
   dimension: max_temperature_f {
-    type: string
-    hidden: yes
+    type: number
     sql: ${TABLE}.Max_Temperature_F ;;
   }
 
   dimension: max_wind_speed_mph {
-    hidden: yes
-    type: string
+    type: number
     sql: ${TABLE}.Max_Wind_Speed_MPH ;;
   }
 
+  dimension: mean_humidity {
+    type: number
+    sql: ${TABLE}.Mean_Humidity ;;
+  }
+
+  dimension: mean_temperature_f {
+    type: number
+    sql: ${TABLE}.Mean_Temperature_F ;;
+  }
+
+  dimension: mean_wind_speed_mph {
+    type: number
+    sql: ${TABLE}.Mean_Wind_Speed_MPH ;;
+  }
+
   dimension: min_humidity {
-    hidden: yes
-    type: string
+    type: number
     sql: ${TABLE}.Min_Humidity ;;
   }
 
   dimension: min_temperature_f {
-    hidden: yes
-    type: string
+    type: number
     sql: ${TABLE}.Min_TemperatureF ;;
   }
 
+  dimension: precipitation_in {
+    type: number
+    sql: ${TABLE}.Precipitation_In ;;
+  }
+
+  measure: count {
+    type: count
+    drill_fields: []
+  }
 }

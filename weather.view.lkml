@@ -3,11 +3,11 @@ view: weather {
     sql:
       (
       SELECT
-        weather.weather_date AS weather_weather,
+        weather.date AS weather_weather,
         weather.Events  AS weather_events,
-        cast(weather.Mean_TemperatureF as int64) AS weather_temperature,
-        cast(weather.Mean_Humidity as int64) AS weather_humidity,
-        cast(weather.Mean_Wind_Speed_MPH as int64) AS weather_wind_speed_mph
+        weather.mean_temperature_f AS weather_temperature,
+        weather.mean_humidity AS weather_humidity,
+        weather.mean_wind_speed_mph AS weather_wind_speed_mph
       FROM bike_trips.weather  AS weather
       )
 
