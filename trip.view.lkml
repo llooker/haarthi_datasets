@@ -171,6 +171,26 @@ view: trip {
     view_label: "Trip Time Prediction"
   }
 
+
+  filter: weather_variance {
+    type: string
+  }
+
+  dimension: adjusted_weather {
+    type: number
+    sql: ${weather.temperature} + CAST({% parameter $weather_variance %} AS FLOAT64) ;;
+
+  }
+
+  measure: trip_count_prediction_what_if {
+    type: average
+    sql:  (${trip_time_prediction.x0} * ${adjusted_weather}) +
+         (${trip_time_prediction.x1} * ${weather.humidity}) +
+         ${trip_time_prediction.intercept};;
+    value_format_name: decimal_1
+    view_label: "Trip Time Prediction"
+  }
+
 #   measure: day_pass_earnings_forecast {
 #     type: number
 #     sql: ${trip_prediction} * ${percent_non_member};;

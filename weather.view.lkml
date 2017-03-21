@@ -53,6 +53,11 @@ view: weather {
     sql: ${TABLE}.weather_events ;;
   }
 
+  dimension: has_rained {
+    type: number
+    sql: IF(${events} LIKE '%Rain%',1,0) ;;
+  }
+
   dimension: temperature {
     label: "Temperature (F)"
     type: number
