@@ -1,5 +1,4 @@
 
-explore: trip_count_prediction {}
 view: trip_count_prediction {
   sql_table_name: bike_trips.trip_count_prediction ;;
 
