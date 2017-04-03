@@ -1,5 +1,7 @@
-view: trip_time_prediction {
-  sql_table_name: bike_trips.trip_time_prediction ;;
+
+explore: trip_count_prediction {}
+view: trip_count_prediction {
+  sql_table_name: bike_trips.trip_count_prediction ;;
 
   dimension: intercept {
     type: number
@@ -24,11 +26,5 @@ view: trip_time_prediction {
     sql: ${TABLE}.X1 ;;
     value_format_name: decimal_3
   }
-
-#   measure: prediction{
-#     type: average
-#     sql:  (${trip_time_prediction.x0} * ${weather.temperature}) + (${trip_time_prediction.x0} * ${weather.temperature}) + ${trip_time_prediction.intercept};;
-#     value_format_name: decimal_1
-#   }
 
 }

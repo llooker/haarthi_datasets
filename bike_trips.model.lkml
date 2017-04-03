@@ -34,7 +34,7 @@ explore: trip {
     sql_on:  ${trip.from_station_id} = ${station_prediction.bike_station} ;;
   }
 
-  join: trip_time_prediction {
+  join: trip_count_prediction {
     type: cross
     relationship: many_to_one
   }
@@ -47,7 +47,7 @@ explore:  weather {
     type: cross
   }
 
-  join: trip_time_prediction {
+  join: trip_count_prediction {
     type: cross
     relationship: many_to_one
   }

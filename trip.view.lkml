@@ -133,6 +133,7 @@ view: trip {
   }
 
   measure:  average_bike_rental_added_cost {
+    hidden: yes
     type:  average
     sql: ${bike_rental_added_cost} ;;
     value_format_name: usd_0
@@ -145,11 +146,13 @@ view: trip {
   }
 
   measure:  count_distinct_dates {
+    hidden: yes
     type: count_distinct
     sql:  ${start_date} ;;
   }
 
   measure:  average_trips_per_day {
+    hidden: yes
     type:  number
     sql:  1.0 * ${trip_count}/NULLIF(${count_distinct_dates}, 0) ;;
     value_format_name: decimal_0
@@ -157,18 +160,18 @@ view: trip {
 
   measure: trip_count_prediction{
     type: average
-    sql:  (${trip_time_prediction.x0} * ${weather.temperature}) +
-          (${trip_time_prediction.x1} * ${weather.humidity}) +
-          ${trip_time_prediction.intercept};;
+    sql:  (${trip_count_prediction.x0} * ${weather.temperature}) +
+    (${trip_count_prediction.x1} * ${weather.humidity}) +
+    ${trip_count_prediction.intercept};;
     value_format_name: decimal_1
-    view_label: "Trip Time Prediction"
+    view_label: "Trip Count Prediction"
   }
 
   measure: trip_count_prediction_revenue{
     type: number
     sql:  ${trip_count_prediction} * 2.25;;
     value_format_name: decimal_1
-    view_label: "Trip Time Prediction"
+    view_label: "Trip Count Prediction"
   }
 
 
@@ -184,11 +187,11 @@ view: trip {
 
   measure: trip_count_prediction_what_if {
     type: average
-    sql:  (${trip_time_prediction.x0} * ${adjusted_weather}) +
-         (${trip_time_prediction.x1} * ${weather.humidity}) +
-         ${trip_time_prediction.intercept};;
+    sql:  (${trip_count_prediction.x0} * ${adjusted_weather}) +
+         (${trip_count_prediction.x1} * ${weather.humidity}) +
+         ${trip_count_prediction.intercept};;
     value_format_name: decimal_1
-    view_label: "Trip Time Prediction"
+    view_label: "Trip Count Prediction"
   }
 
 #   measure: day_pass_earnings_forecast {
