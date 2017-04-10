@@ -64,9 +64,11 @@ view: weather {
     sql: ${TABLE}.weather_temperature ;;
   }
 
+
+  # If there is no value for humidity, then set the humidity to the average value of humidity for seattle.
   dimension: humidity {
     type: number
-    sql: ${TABLE}.weather_humidity ;;
+    sql:  IF (${TABLE}.weather_humidity = 0, 90.0, ${TABLE}.weather_humidity) ;;
   }
 
   dimension: wind_speed_mph {
