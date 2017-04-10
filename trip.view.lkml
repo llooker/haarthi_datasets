@@ -171,6 +171,7 @@ view: trip {
     type: number
     sql: ${trip_count} - ${trip_count_prediction} ;;
     view_label: "Trip Count Prediction"
+    value_format_name: decimal_2
   }
 
   measure: trip_count_prediction_revenue{
