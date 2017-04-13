@@ -201,16 +201,14 @@ view: trip {
     view_label: "Trip Count Prediction"
   }
 
-#   measure: day_pass_earnings_forecast {
-#     type: number
-#     sql: ${trip_prediction} * ${percent_non_member};;
-#     value_format_name: usd_0
-#   }
-
-#   measure:  start_predictions {
-#     type:  average
-#     sql: (${start_slope} * ${weather.temperature} ) +  ${start_intercept};;
-#     value_format_name: decimal_1
-#   }
-
+  set: detail {
+    fields: [
+      trip_count_prediction_what_if
+      , adjusted_weather
+      , weather_variance
+      , trip_count_prediction_revenue
+      , trip_count_residual
+      , trip_count_prediction
+      ]
+  }
 }
