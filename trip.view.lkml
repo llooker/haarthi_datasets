@@ -17,6 +17,18 @@ view: trip {
     sql: ${TABLE}.birthyear ;;
   }
 
+  dimension: age {
+    type: number
+    sql: EXTRACT(YEAR FROM CURRENT_DATE()) - SAFE_CAST(${birthyear} AS INT64) ;;
+  }
+
+  dimension: age_group {
+    type: tier
+    tiers: [18,25,35,45,55,65]
+    style: integer
+    sql: ${age} ;;
+  }
+
   dimension: from_station_id {
     type: string
     sql: ${TABLE}.from_station_id ;;
@@ -37,6 +49,7 @@ view: trip {
     timeframes: [
       raw,
       time,
+      hour_of_day,
       date,
       week,
       month,
@@ -44,6 +57,11 @@ view: trip {
       year
     ]
     sql: ${TABLE}.start_time ;;
+  }
+
+  dimension: week_or_weekend {
+    type: string
+    sql: CASE WHEN EXTRACT(DAYOFWEEK FROM ${TABLE}.start_time) IN (1,2,3,4,5) THEN "Week" ELSE "Weekend" END ;;
   }
 
   dimension_group: stop {
