@@ -170,7 +170,6 @@ view: trip {
   }
 
   measure:  average_trips_per_day {
-    hidden: yes
     type:  number
     sql:  1.0 * ${trip_count}/NULLIF(${count_distinct_dates}, 0) ;;
     value_format_name: decimal_0
