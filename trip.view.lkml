@@ -7,6 +7,11 @@ view: trip {
     sql: ${TABLE}.trip_id ;;
   }
 
+#   dimension: compound_primary_id {
+#     type: string
+#     sql: CONCAT(${trip_id},  ;;
+#   }
+
   dimension: bike_id {
     type: string
     sql: ${TABLE}.bike_id ;;

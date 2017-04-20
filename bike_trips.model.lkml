@@ -19,7 +19,7 @@ explore: trip {
     from: station
     relationship: many_to_one
     type: left_outer
-    sql_on: ${trip.from_station_id} = ${end_station.station_id};;
+    sql_on: ${trip.to_station_id} = ${end_station.station_id};;
   }
 
   join:  weather {
@@ -38,6 +38,11 @@ explore: trip {
     type: cross
     relationship: many_to_one
   }
+
+#   join: from_to_trip {
+#     type: left_outer
+#     sql_on: ${start_station.station_id} = ${from_to_trip.trip_from_station_id} ;;
+#   }
 }
 
 
