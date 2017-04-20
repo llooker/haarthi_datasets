@@ -1,5 +1,9 @@
 view: trip {
-  sql_table_name: bike_trips.trip ;;
+  derived_table: {
+    sql: SELECT CAST(trip.trip_duration AS float64) as trip_duration_converted, * FROM bike_trips.trip as trip ;;
+    persist_for: "365*24 hours"
+  }
+
 
   dimension: trip_id {
     primary_key: yes
@@ -90,7 +94,12 @@ view: trip {
 
   dimension: trip_duration {
     type: number
-    sql: cast(${TABLE}.trip_duration as FLOAT64);;
+    sql: ${TABLE}.trip_duration_converted ;;
+  }
+
+  dimension: is_a_member {
+    type: yesno
+    sql: ${usertype} = "Member" ;;
   }
 
   dimension: trip_duration_minutes {
@@ -222,6 +231,29 @@ view: trip {
   measure: average_trip_cost {
     type: average
     sql: ${bike_rental_added_cost} ;;
+  }
+
+  ###### MEMBER SPECIFIC COUNTS #######
+
+  measure: average_trip_cost_for_members {
+    type: average
+    sql: ${bike_rental_added_cost} ;;
+    filters: {
+      field: is_a_member
+      value: "yes"
+      }
+    value_format_name: "usd"
+    }
+
+  measure: average_trip_cost_for_nonmembers {
+    type: average
+    sql: ${bike_rental_added_cost} ;;
+    filters: {
+      field: is_a_member
+      value: "no"
+    }
+    value_format_name: "usd"
+
   }
 
   set: detail {
