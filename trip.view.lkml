@@ -17,6 +17,17 @@ view: trip {
     sql: ${TABLE}.birthyear ;;
   }
 
+  dimension: age {
+    type: number
+    sql: ${birthyear} - EXTRACT(YEAR FROM CURRENT_DATE()) ;;
+  }
+
+  dimension: age_group {
+    type: tier
+    tiers: [18,25,35,45,55,65]
+    style: integer
+  }
+
   dimension: from_station_id {
     type: string
     sql: ${TABLE}.from_station_id ;;
