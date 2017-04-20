@@ -219,6 +219,11 @@ view: trip {
     view_label: "Trip Count Prediction"
   }
 
+  measure: average_trip_cost {
+    type: average
+    sql: ${bike_rental_added_cost} ;;
+  }
+
   set: detail {
     fields: [
       trip_count_prediction_what_if
