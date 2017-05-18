@@ -212,22 +212,32 @@ view: trip {
     view_label: "Trip Count Prediction"
   }
 
-
   filter: weather_variance {
     type: string
+    default_value: "5"
   }
 
   dimension: adjusted_weather {
     type: number
-    sql: ${weather.temperature} + CAST({% parameter $weather_variance %} AS FLOAT64) ;;
+    sql: ${weather.temperature} + CAST({% parameter weather_variance %} AS FLOAT64) ;;
 
   }
 
   measure: trip_count_prediction_what_if {
+    label: "Trip Count Prediction Upper Boundary"
     type: average
     sql:  (${trip_count_prediction.x0} * ${adjusted_weather}) +
          (${trip_count_prediction.x1} * ${weather.humidity}) +
          ${trip_count_prediction.intercept};;
+    value_format_name: decimal_1
+    view_label: "Trip Count Prediction"
+  }
+
+
+  measure: trip_count_prediction_what_if_lower {
+    label: "Trip Count Prediction Lower Boundary"
+    type: number
+    sql: 2 * ${trip_count_prediction} - ${trip_count_prediction_what_if} ;;
     value_format_name: decimal_1
     view_label: "Trip Count Prediction"
   }
@@ -264,7 +274,7 @@ view: trip {
     fields: [
       trip_count_prediction_what_if
       , adjusted_weather
-      , weather_variance
+#       , weather_variance
       , trip_count_prediction_revenue
       , trip_count_residual
       , trip_count_prediction
