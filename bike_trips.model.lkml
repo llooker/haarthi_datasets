@@ -9,6 +9,7 @@ include: "*.view"
 include: "*.dashboard"
 
 explore: trip {
+  label: "Predictive Analytics"
   join: start_station {
     from: station
     relationship: many_to_one
