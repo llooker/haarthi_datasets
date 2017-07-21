@@ -1,7 +1,5 @@
-# connection: "haarthi-bigquery"
 connection: "lookerdata_publicdata_standard_sql"
 label: "4) Bike Trips"
-
 
 
 # include all the views
@@ -22,7 +20,7 @@ explore: trip {
     from: station
     relationship: many_to_one
     type: left_outer
-    sql_on: ${trip.from_station_id} = ${end_station.station_id};;
+    sql_on: ${trip.to_station_id} = ${end_station.station_id};;
   }
 
   join:  weather {
@@ -37,10 +35,15 @@ explore: trip {
     sql_on:  ${trip.from_station_id} = ${station_prediction.bike_station} ;;
   }
 
-  join: trip_time_prediction {
+  join: trip_count_prediction {
     type: cross
     relationship: many_to_one
   }
+
+#   join: from_to_trip {
+#     type: left_outer
+#     sql_on: ${start_station.station_id} = ${from_to_trip.trip_from_station_id} ;;
+#   }
 }
 
 
@@ -50,7 +53,7 @@ explore:  weather {
     type: cross
   }
 
-  join: trip_time_prediction {
+  join: trip_count_prediction {
     type: cross
     relationship: many_to_one
   }

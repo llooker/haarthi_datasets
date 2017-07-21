@@ -5,6 +5,8 @@ view: station {
     primary_key: yes
     type: string
     sql: ${TABLE}.station_id ;;
+
+
   }
 
   dimension: current_dock_count {
@@ -43,6 +45,29 @@ view: station {
     type: location
     sql_latitude: ${latitude} ;;
     sql_longitude: ${longitude} ;;
+
+    action: {
+      label: "Re-route Bikes"
+      url: "https://desolate-refuge-53336.herokuapp.com/posts"
+      icon_url: "https://sendgrid.com/favicon.ico"
+      param: {
+        name: "some_auth_code"
+        value: "abc123456"
+      }
+      form_param: {
+        name: "From"
+        required: yes
+        default: "{{ station_id._value }}"
+      }
+      form_param: {
+        name: "To"
+        required: yes
+      }
+      form_param: {
+        name: "Amount"
+        required: yes
+      }
+    }
   }
 
   dimension: modification_date {
@@ -53,6 +78,29 @@ view: station {
   dimension: name {
     type: string
     sql: ${TABLE}.name ;;
+
+    action: {
+      label: "Re-route Bikes"
+      url: "https://desolate-refuge-53336.herokuapp.com/posts"
+      icon_url: "https://cdn.geekwire.com/wp-content/uploads/2014/05/bikeshare.jpeg"
+      param: {
+        name: "some_auth_code"
+        value: "abc123456"
+      }
+      form_param: {
+        name: "From"
+        required: yes
+        default: "{{ name._value }}"
+      }
+      form_param: {
+        name: "To"
+        required: yes
+      }
+      form_param: {
+        name: "Amount"
+        required: yes
+      }
+    }
   }
 
   measure: count {
