@@ -4,6 +4,7 @@ include: "*.view.lkml"         # include all views in this project
 include: "*.dashboard.lookml"  # include all dashboards in this project
 
 explore: trip {
+  label: "Trips"
   fields: [ALL_FIELDS*, -trip.detail*]
   join: start_station {
     from: station
