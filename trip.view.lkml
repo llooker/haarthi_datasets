@@ -65,6 +65,7 @@ view: trip {
       quarter,
       year
     ]
+    convert_tz: no
     sql: ${TABLE}.start_time ;;
   }
 
