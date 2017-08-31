@@ -8,6 +8,10 @@ include: "*.view"
 # include all the dashboards
 include: "*.dashboard"
 
+datagroup: bikes_low {
+  sql_trigger: select count(*) ;;
+}
+
 explore: trip {
   label: "Predictive Analytics"
   join: start_station {
