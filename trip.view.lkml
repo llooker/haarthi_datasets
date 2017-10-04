@@ -46,6 +46,7 @@ view: trip {
   dimension: from_station_name {
     type: string
     sql: ${TABLE}.from_station_name ;;
+    drill_fields: [start_time]
   }
 
   dimension: gender {
@@ -121,7 +122,7 @@ view: trip {
 
   measure: trip_count {
     type: count
-    drill_fields: [trip_id, from_station_name, to_station_name, trip.count]
+    drill_fields: [ from_station_name, to_station_name, trip_count]
   }
 
   measure:  non_member_count {

@@ -1,5 +1,6 @@
 connection: "lookerdata_publicdata_standard_sql"
 label: "4) Bike Trips"
+persist_for: "24 hours"
 
 
 # include all the views
