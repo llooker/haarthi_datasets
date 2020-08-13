@@ -1,10 +1,10 @@
-connection: "haarthi-bigquery"
+connection: "lookerdata_publicdata_standard_sql"
 
 # include all the views
 include: "*.view"
 
 # include all the dashboards
-include: "*.dashboard"
+#include: "*.dashboard"
 
 explore: trip {
   join: start_station {
