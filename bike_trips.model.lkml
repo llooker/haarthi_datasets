@@ -5,7 +5,7 @@ connection: "lookerdata_publicdata_standard_sql"
 include: "*.view"
 
 # include all the dashboards
-#include: "*.dashboard"
+include: "*.dashboard"
 
 datagroup: bikes_low {
   sql_trigger: select count(*) ;;
