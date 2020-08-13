@@ -1,5 +1,39 @@
 view: weather {
-  sql_table_name: bike_trips.weather ;;
+  derived_table: {
+    sql:
+      (
+      SELECT
+        weather.date AS weather_weather,
+        weather.Events  AS weather_events,
+        weather.mean_temperature_f AS weather_temperature,
+        weather.mean_humidity AS weather_humidity,
+        weather.mean_wind_speed_mph AS weather_wind_speed_mph
+      FROM bike_trips.weather  AS weather
+      )
+
+      UNION ALL
+
+      (SELECT
+        -- weather.forecast_date AS weather_forecast_date
+        DATE(timestamp(weather.forecast_date)) AS weather_weather_date,
+      -- DATE(timestamp(forecast_date))
+        weather.Status  AS weather_status,
+        weather.Temperature  AS weather_temperature,
+        weather.Humidity  AS weather_humidity,
+        weather.Wind  AS weather_wind
+
+      FROM bike_trips.weather_forecast  AS weather
+      )
+       ;;
+  }
+
+  dimension: date {
+    primary_key: yes
+    hidden: yes
+    type: string
+    sql: ${TABLE}.weather_weather ;;
+  }
+
   dimension_group: weather {
     type: time
     timeframes: [
@@ -11,72 +45,38 @@ view: weather {
       year
     ]
     convert_tz: no
-    sql: timestamp(${TABLE}.weather_date);;
-  }
-
-  dimension: weather {
-    type:  string
-    sql: ${TABLE}.weather_date;;
-    primary_key: yes
+    sql: timestamp(${date});;
   }
 
   dimension: events {
     type: string
-    sql: ${TABLE}.Events ;;
+    sql: ${TABLE}.weather_events ;;
   }
 
-  dimension: max_humidity {
+  dimension: has_rained {
     type: number
-    sql: INTEGER(${TABLE}.Max_Humidity) ;;
+    sql: IF(${events} LIKE '%Rain%',1,0) ;;
   }
 
-  dimension: max_temperature_f {
-    type: string
-    sql: ${TABLE}.Max_Temperature_F ;;
-  }
-
-  dimension: max_wind_speed_mph {
-    type: string
-    sql: ${TABLE}.Max_Wind_Speed_MPH ;;
-  }
-
-  dimension: mean_humidity {
-    type: string
-    sql: ${TABLE}.Mean_Humidity ;;
-  }
-
-  dimension: mean_temperature_f {
+  dimension: temperature {
+    label: "Temperature (F)"
     type: number
-    sql: cast(${TABLE}.Mean_TemperatureF as int64);;
+    sql: ${TABLE}.weather_temperature ;;
   }
 
-  dimension: mean_wind_speed_mph {
+
+  # If there is no value for humidity, then set the humidity to the average value of humidity for seattle.
+  dimension: humidity {
     type: number
-    sql: ${TABLE}.Mean_Wind_Speed_MPH ;;
+    sql:  IF (${TABLE}.weather_humidity = 0, 90.0, ${TABLE}.weather_humidity) ;;
   }
 
-  dimension: min_humidity {
-    type: string
-    sql: ${TABLE}.Min_Humidity ;;
+  dimension: wind_speed_mph {
+    type: number
+    sql: ${TABLE}.weather_wind_speed_mph ;;
   }
 
-  dimension: min_temperature_f {
-    type: string
-    sql: ${TABLE}.Min_TemperatureF ;;
-  }
-
-  dimension: precipitation_in {
-    type: string
-    sql: ${TABLE}.Precipitation_In ;;
-  }
-
-  measure: count {
-    type: count
-    drill_fields: []
-  }
-
-  dimension: predictions {
-    type:  number
-    sql:  (${mean_temperature_f} * 47.346939) + 3402.245766 ;;
+  set: detail {
+    fields: [weather_date, events, temperature, humidity, wind_speed_mph]
   }
 }
